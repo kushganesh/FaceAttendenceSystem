@@ -2,12 +2,13 @@ package com.facerecognitionsystem.service;
 
 import com.facerecognitionsystem.dto.UserRegistrationRequest;
 import com.facerecognitionsystem.entity.*;
+import com.facerecognitionsystem.enum_trmp.*;
 import com.facerecognitionsystem.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImp implements UserService{
+public class UserServiceImp implements UserService {
     @Autowired
     private UserRepository userRepository;
 
@@ -23,8 +24,13 @@ public class UserServiceImp implements UserService{
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    @Autowired
+    private AddressRepository addressRepository;
+
+
+
     @Override
-      public void registerUser(UserRegistrationRequest userRequest) throws Exception {
+    public void registerUser(UserRegistrationRequest userRequest) throws Exception {
 
 
         // Check if email already exists
@@ -33,7 +39,7 @@ public class UserServiceImp implements UserService{
         }
 
         // Check if role is valid
-        Role role = (Role) roleRepository.findByName(userRequest.getRole())
+        Role role = (Role) roleRepository.findByRole(userRequest.getRole().trim().toLowerCase())
                 .orElseThrow(() -> new RuntimeException("Invalid role"));
 
 
@@ -45,15 +51,31 @@ public class UserServiceImp implements UserService{
 //        user.setPassword(new BCryptPasswordEncoder().encode(userRequest.getPassword())); // Encrypt password
         user.setRole(role);
 
-        userRepository.save(user);
+
+        Address address = new Address();
+        address.setCountry(userRequest.getCountry());
+        address.setState(userRequest.getState());
+        address.setCity(userRequest.getCity());
+        address.setPincode(userRequest.getPincode());
+        address.setStreet(userRequest.getStreet());
+        addressRepository.save(address);
+        user.setAddress(address);
+        var userinfo = userRepository.save(user);
+//        user.setAddress(address);
+
 
         // Handle role-specific registration
         if (role.getRole().equals("Student")) {
             Student student = new Student();
             student.setUser(user);
-//            student.setEnrollmentNumber(userRequest.getEnrollmentNumber());
-//            student.setCourse(userRequest.getCourse());
-//            student.setYear(userRequest.getYear());
+            student.setDepartment(Department.fromString(userRequest.getDepartment()));
+            student.setCourse(Course.fromString(userRequest.getCourse()));
+            student.setGender(Gender.fromString(userRequest.getGender()));
+            student.setCollegeStatus(CollegeStatus.fromString(userRequest.getCollegeStatus()));
+            student.setYearOfStudy(YearOfStudy.fromString(userRequest.getYear()));
+            student.setDateOfBirth(userRequest.getDateOfBirth());
+            student.setRollNumber(userRequest.getEnrollmentNumber());
+            student.setAdmissionDate(userRequest.getAdmissionDate());
             studentRepository.save(student);
         } else if (role.getRole().equals("Teacher")) {
             Teacher teacher = new Teacher();

@@ -8,5 +8,15 @@ public enum Semester {
     FIFTH_SEMESTER,
     SIXTH_SEMESTER,
     SEVENTH_SEMESTER,
-    EIGHTH_SEMESTER
+    EIGHTH_SEMESTER;
+
+    public static Semester fromString(String value) {
+        for (Semester sem : Semester.values()) {
+            if (sem.name().equalsIgnoreCase(value)) {
+                return sem;
+            }
+        }
+        throw new IllegalArgumentException("Invalid Semester: " + value);
+    }
 }
+

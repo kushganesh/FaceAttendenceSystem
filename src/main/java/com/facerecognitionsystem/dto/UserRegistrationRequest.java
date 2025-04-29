@@ -1,5 +1,7 @@
 package com.facerecognitionsystem.dto;
 
+import com.facerecognitionsystem.enum_trmp.Course;
+
 import java.time.LocalDate;
 
 public class UserRegistrationRequest {
@@ -21,7 +23,7 @@ public class UserRegistrationRequest {
     // Student Specific Details
     private String enrollmentNumber;   // (also called rollNumber sometimes)
     private String course;             // Enum name (BTECH, MTECH, etc.)
-    private Integer year;              // Year of Study (1,2,3,4)
+    private String year;              // Year of Study (1,2,3,4)
     private String department;         // Department Enum name
     private String collegeStatus;      // Enum name (REGULAR, DROP, etc.)
     private LocalDate admissionDate;      // ISO format: yyyy-MM-dd
@@ -141,11 +143,11 @@ public class UserRegistrationRequest {
         this.course = course;
     }
 
-    public Integer getYear() {
+    public String getYear() {
         return year;
     }
 
-    public void setYear(Integer year) {
+    public void setYear(String year) {
         this.year = year;
     }
 

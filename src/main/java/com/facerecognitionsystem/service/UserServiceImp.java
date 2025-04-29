@@ -1,8 +1,7 @@
 package com.facerecognitionsystem.service;
 
 import com.facerecognitionsystem.dto.UserRegistrationRequest;
-import com.facerecognitionsystem.entity.Role;
-import com.facerecognitionsystem.entity.User;
+import com.facerecognitionsystem.entity.*;
 import com.facerecognitionsystem.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,7 @@ public class UserServiceImp implements UserService{
     private EmployeeRepository employeeRepository;
 
     @Override
-      public void registerUser(UserRegistrationRequest userRequest)  {
+      public void registerUser(UserRegistrationRequest userRequest) throws Exception {
 
 
         // Check if email already exists
@@ -43,29 +42,29 @@ public class UserServiceImp implements UserService{
         user.setName(userRequest.getName());
         user.setEmail(userRequest.getEmail());
         user.setPhone(userRequest.getPhone());
-        user.setPassword(new BCryptPasswordEncoder().encode(userRequest.getPassword())); // Encrypt password
+//        user.setPassword(new BCryptPasswordEncoder().encode(userRequest.getPassword())); // Encrypt password
         user.setRole(role);
 
         userRepository.save(user);
 
         // Handle role-specific registration
-        if (role.getName().equals("Student")) {
+        if (role.getRole().equals("Student")) {
             Student student = new Student();
             student.setUser(user);
-            student.setEnrollmentNumber(userRequest.getEnrollmentNumber());
-            student.setCourse(userRequest.getCourse());
-            student.setYear(userRequest.getYear());
+//            student.setEnrollmentNumber(userRequest.getEnrollmentNumber());
+//            student.setCourse(userRequest.getCourse());
+//            student.setYear(userRequest.getYear());
             studentRepository.save(student);
-        } else if (role.getName().equals("Teacher")) {
+        } else if (role.getRole().equals("Teacher")) {
             Teacher teacher = new Teacher();
             teacher.setUser(user);
-            teacher.setDepartment(userRequest.getDepartment());
+//            teacher.setDepartment(userRequest.getDepartment());
             teacher.setDesignation(userRequest.getDesignation());
             teacherRepository.save(teacher);
-        } else if (role.getName().equals("Employee")) {
+        } else if (role.getRole().equals("Employee")) {
             Employee employee = new Employee();
             employee.setUser(user);
-            employee.setDepartment(userRequest.getDepartment());
+//            employee.setDepartment(userRequest.getDepartment());
             employee.setPosition(userRequest.getPosition());
             employeeRepository.save(employee);
         }

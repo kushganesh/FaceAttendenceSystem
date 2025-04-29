@@ -8,12 +8,12 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Role {
-    String role;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
 
+    String role;
     public Role() {
         super();
     }

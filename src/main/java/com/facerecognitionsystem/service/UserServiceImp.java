@@ -24,7 +24,8 @@ public class UserServiceImp implements UserService{
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    public void registerUser(UserRegistrationRequest userRequest) throws Exception {
+    @Override
+      public void registerUser(UserRegistrationRequest userRequest)  {
 
 
         // Check if email already exists
